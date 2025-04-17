@@ -253,3 +253,46 @@ natural_entropy <- function(data_column) {
   prob <- table(data_column) / length(data_column)
   -sum(prob * log(prob), na.rm = TRUE)
 }
+
+
+# Function to generate the hierarchy for a given tree
+generate_tree_hierarchy <- function(mytreeindex) {
+  # Randomly sample size of the subset to be used for the tree
+  subset_size <- sample(1:length(mytreeindex), 1)
+  
+  # Randomly select the variables in that subset without replacement
+  myH <- sample(mytreeindex, size = subset_size, replace = FALSE)
+  
+  return(myH)
+}
+         
+calculate_branch_metrics <- function(predictor, target) {
+  unique_vals <- unique(predictor) # Unique values in predictor
+  total_size <- length(target) # Total size of the target
+  
+  # Weighted Gini impurity calculation
+  E1 <- sum(sapply(unique_vals, function(val) {
+    subset <- target[predictor == val]
+    subset_metrics <- calculate_metrics(subset)
+    (length(subset) / total_size) * subset_metrics$Gini
+  }))
+  
+  # Information Gain
+  IG1 <- E0 - E1
+  return(list(E1 = round(E1, 5), IG1 = round(IG1, 5)))
+}
+         # Function to calculate the percentage of neighbors for each climate zone
+calculate_zone_percentages <- function(K, distances, labels) {
+  # Find the indices of the K nearest neighbors
+  mykranks <- which(rank(distances, ties.method = "first") <= K)
+  
+  nearest_labels <- labels[mykranks]
+  
+  # Count the percentage for each climate zone
+  zones <- unique(labels)
+  percentages <- sapply(zones, function(zone) {
+    (sum(nearest_labels == zone) / K) * 100
+  })
+  
+  return(percentages)
+}
