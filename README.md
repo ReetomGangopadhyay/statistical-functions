@@ -169,6 +169,50 @@ Computes natural (log base *e*) entropy of a categorical variable.
 
 ---
 
+### `generate_tree_hierarchy(mytreeindex)`
+
+Randomly generates a subset of variables (a "branch") from a given index set. Useful for decision tree and ensemble modeling.
+
+**Arguments**:
+- `mytreeindex`: A vector of variable indices.
+
+**Returns**:
+- A random subset of `mytreeindex` without replacement.
+
+---
+
+### `calculate_branch_metrics(predictor, target)`
+
+Computes Gini impurity and information gain for a potential decision tree split.
+
+**Arguments**:
+- `predictor`: A categorical predictor variable.
+- `target`: The target class variable (for which impurity is measured).
+
+**Returns**:
+- `E1`: Weighted Gini impurity after the split.
+- `IG1`: Information gain (requires prior global impurity `E0` to be defined in scope).
+
+>  Note: Assumes `E0` (entropy or Gini of parent node) is defined in the global environment.
+
+---
+
+### `calculate_zone_percentages(K, distances, labels)`
+
+Computes the percentage distribution of the `K` nearest neighbors across different categorical labels (e.g., climate zones).
+
+**Arguments**:
+- `K`: Number of neighbors.
+- `distances`: Vector of distances to neighbors.
+- `labels`: Vector of class labels corresponding to each observation.
+
+**Returns**:
+- A named vector containing the percentage of each label among the nearest `K` neighbors.
+
+---
+
+
+
 ## Example Usage
 
 ```r
